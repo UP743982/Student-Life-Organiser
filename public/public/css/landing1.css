@@ -1,0 +1,83 @@
+.landing_body{
+	/*background-image: url("../images/bg.jpg");*/
+	background-color: 540568;
+	background-size: cover;
+}
+
+
+#landing_header{
+	color: white;
+	text-shadow: 2px 2px black;
+	font-size: 80px;
+	font-weight: 700;
+	font-family: Trebuchet MS, Helvetica, sans-serif;
+	text-align: center;
+	letter-spacing: 1px;
+}
+
+#sign_up_div,#sign_in_div{
+	width: 50%;
+	float: left;
+	padding-top: 15%;
+	background-color: red;
+}
+
+#sign_in_form {
+	width: 80%;
+    height:220px;
+    margin: auto;
+    background-color: blue;
+}
+
+#sign_up_form {
+	width: 80%;
+    height:280px;
+    margin: auto;
+    background-color: blue;
+}
+
+
+#sign_up_form input{
+	float: left;
+	margin-left: 35%; 
+	clear:both;
+	margin-top: 20px;
+	height: 35px;
+}
+
+#sign_up_form input[type=button]{
+	float:left;
+	clear:both;
+	margin-top: 25px;
+	margin-left: 35%;
+	padding: 0px;
+	width: 100px;
+}
+
+#sign_up_form h2{
+	color: white;
+	text-shadow: 2px 2px black;
+	text-align: center;
+	font-family: Trebuchet MS, Helvetica, sans-serif;
+}
+
+#sign_in_form h2{
+	color: white;
+	text-shadow: 2px 2px black;
+	text-align: center;
+	font-family: Trebuchet MS, Helvetica, sans-serif;
+}
+
+
+#sign_in_form input{
+	float: left;
+	margin-top: 20px;
+	margin-left: 35%;
+	height: 35px;
+}
+
+#sign_in_form input[type=button]{
+	clear: left;
+	width: 100px;
+	margin-left: 35%;
+}

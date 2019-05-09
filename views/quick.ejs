@@ -1,0 +1,120 @@
+<html>
+	<%include partials/header%>
+		<body>
+		<link rel="stylesheet" type="text/css" href="/css/home_page_design.css">
+		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+<ul class="sidenav">
+  <!-- Bootstrap core CSS -->
+  <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <li><%include partials/logout%></li>
+  <li><a href="http://localhost:3000/home">Home</a></li>
+  <li><a href="http://localhost:3000/user_profile">Profile</a></li>
+  <li><a href="http://localhost:3000/friends">Find Friends</a></li>
+  <li><a class="active" href="#qaccess">Quick Access</a></li>
+  
+</ul>
+
+<!-- Content Row -->
+    <div class="row">
+      <div class="col-md-4 mb-5">
+        <div id="card_body_border" class="card h-100">
+          <div class="card-body">
+            <h2 class="card-title">Finance</h2>
+            <p class="card-text"></p>
+            <img style="width: 200px" src="https://image.flaticon.com/icons/svg/61/61584.svg">
+          </div>
+          <div class="card-footer">
+            <a target="_blank" href="https://kb.myport.ac.uk/search/getsearch/12/4?text=*&catid=1000&title=Money&fromwidget=true&widgetsearch=1" class="btn btn-primary btn-sm">Read More</a>
+          </div>
+        </div>
+      </div>
+      <!-- /.col-md-4 -->
+      <div class="col-md-4 mb-5">
+        <div id="card_body_border" class="card h-100">
+          <div class="card-body">
+            <h2 class="card-title">Transportation</h2>
+            <p class="card-text"></p>
+            <img style="width: 200px" src="https://image.flaticon.com/icons/svg/0/308.svg">
+          </div>
+          <div class="card-footer">
+            <a target="_blank" href="https://kb.myport.ac.uk/search/getsearch/12/4?text=*&catid=1008&title=Getting%20around&fromwidget=true&widgetsearch=1" class="btn btn-primary btn-sm">Read More</a>
+          </div>
+        </div>
+      </div>
+      <!-- /.col-md-4 -->
+      <div class="col-md-4 mb-5">
+        <div id="card_body_border" class="card h-100">
+          <div class="card-body">
+            <h2 class="card-title">Health & Wellbeing</h2>
+            <p class="card-text"></p>
+            <img style="width: 200px" src="https://image.flaticon.com/icons/svg/25/25296.svg">
+          </div>
+          <div class="card-footer">
+            <a target="_blank" href="https://kb.myport.ac.uk/search/getsearch/12/4?text=*&catid=1002&title=Health%20and%20Wellbeing&fromwidget=true&widgetsearch=1" class="btn btn-primary btn-sm">Read More</a>
+          </div>
+        </div>
+      </div>
+      <!-- /.col-md-4 -->
+
+      <!-- Content Row -->
+    <div class="row">
+      <div class="col-md-4 mb-5">
+        <div id="card_body_border" class="card h-100">
+          <div class="card-body">
+            <h2 class="card-title">Housing</h2>
+            <p class="card-text"></p>
+            <img style="width: 200px" src="https://image.flaticon.com/icons/svg/2/2144.svg">
+          </div>
+          <div class="card-footer">
+            <a target="_blank" href="https://kb.myport.ac.uk/search/getsearch/12/4?text=*&catid=1006&title=Living%20in%20Portsmouth&fromwidget=true&widgetsearch=1" class="btn btn-primary btn-sm">Read More</a>
+          </div>
+        </div>
+      </div>
+      <!-- /.col-md-4 -->
+      <div class="col-md-4 mb-5">
+        <div id="card_body_border" class="card h-100">
+          <div class="card-body">
+            <h2 class="card-title">Societies</h2>
+            <p class="card-text"></p>
+            <img style="width: 200px" src="https://image.flaticon.com/icons/svg/33/33308.svg">
+          </div>
+          <div class="card-footer">
+            <a target="_blank" href="https://kb.myport.ac.uk/search/getsearch/12/4?text=*&catid=1009&title=Sports%20&%20Recreation&fromwidget=true&widgetsearch=1" class="btn btn-primary btn-sm">Read More</a>
+          </div>
+        </div>
+      </div>
+      <!-- /.col-md-4 -->
+      <div class="col-md-4 mb-5">
+        <div id="card_body_border" class="card h-100">
+          <div class="card-body">
+            <h2 class="card-title">Career & Employability</h2>
+            <p class="card-text"></p>
+            <img style="width: 200px" src="https://image.flaticon.com/icons/svg/1063/1063299.svg">
+          </div>
+          <div class="card-footer">
+            <a target="_blank" href="https://kb.myport.ac.uk/search/getsearch/12/4?text=*&catid=1010&title=Careers%20&%20Employability&fromwidget=true&widgetsearch=1" class="btn btn-primary btn-sm">Read More</a>
+          </div>
+        </div>
+      </div>
+      <!-- /.col-md-4 -->
+
+    </div>
+    <!-- /.row -->
+		</body>
+		<script>
+			$(".request_button").on("click", function(){
+				let clicked_button = $(this);
+				$.ajax({
+					method: "POST",
+					url: "/friend_request",
+					contentType: "application/json",
+					data: JSON.stringify({"friend_member_id": clicked_button.attr("id")}),
+					success: function(){
+						clicked_button.closest(".potential_friend").remove();
+					}
+				})
+			})
+
+
+		</script>
+</html>

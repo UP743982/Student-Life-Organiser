@@ -1,0 +1,62 @@
+<html>
+	<%include partials/header%>
+<head>
+<link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+</head>
+	<body class="landing_body">
+		<h1 id="landing_header">Port Connect</h1>
+		<div class="container">
+
+		<div id="sign_up_div">
+			<form id="sign_up_form">
+				<h2>Sign Up&nbsp</h2>
+				<input type="text" id="name" name="name" placeholder="Name">
+				<input type="text" id="email" name="email" placeholder="Email Address">
+				<input type="password" id="password" name="password" placeholder="Password">
+				<input id="register_user" type="button" value="Register">
+			</form>
+		</div>
+		<div id="sign_in_div">
+			<form id="sign_in_form">
+				<h2>Sign In</h2>
+				<input type="text" id="usr_email" name="email" placeholder="Email Address">
+				<input type="password" id="usr_pwd" name="password" placeholder="Password">
+				<input id="sign_in_user" type="button" value="Sign In">
+			</form>
+		</div>
+		</div>
+
+
+	</body>
+	<script>
+		$("#register_user").on("click", function(){
+			$.ajax({
+				url: "/sign_up",
+				method: "POST",
+				data: $("#sign_up_form").serialize(),
+				success: function() {
+					
+				},
+				error: function(err) {
+					$("#name,#email,#password").val("");
+				}
+			});
+		});
+
+		$("#sign_in_user").on("click", function() {
+			$.ajax({
+				url: "/login",
+				method: "POST",
+				data: $("#sign_in_form").serialize(),
+				success: function() {
+					location.href="http://localhost:3000/home";
+				},
+				error: function(err) {
+					$("#usr_email,#usr_pwd").val("");
+				}
+			})
+		})
+	</script>
+</html>

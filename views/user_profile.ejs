@@ -1,0 +1,242 @@
+<html>
+<%include partials/header%>
+<body>
+		<link rel="stylesheet" type="text/css" href="/css/home_page_design.css">
+		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+<ul class="sidenav">
+  <li><%include partials/logout%></li>
+  <li><a href="http://localhost:3000/home">Home</a></li>
+  <li><a class="active" href="http://localhost:3000/user_profile">Profile</a></li>
+  <li><a href="http://localhost:3000/friends">Find Friends</a></li>
+  <li><a href="http://localhost:3000/quick">Quick Access</a></li>
+</ul>
+
+<!-- Button trigger modal -->
+<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenter">
+  Edit
+</button>
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle">Modal title</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        ...
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+	<button id="edit_profile_button" type="button">Edit</button>
+	<h1 id="profile_header">Profile</h1>
+
+<div id="user_friends_list_section">
+	<h2>Friends</h2>
+	<ul style="background-color: white">
+		<%user.friends.forEach(function(friend){%>
+			<li>
+				<div id="<%=friend.member_id%>" class="user_friend_list">
+					<img src="http://localhost:3000/user_profile_images/<%=friend.profile_pic%>">
+					</div>
+					<span><%=friend.friend_name%></span><br>
+					<button onclick="window.location.href='http://localhost:3000/user_profile/<%=friend.member_id%>'" type="button">Go to Profile</button>
+					<button id="<%=friend.member_id%>" class="chat_button" type="button">Chat</button>
+				</div>
+			</li>
+		<%})%>
+	</ul>
+</div>
+
+	<div id="user_profile_div">
+		<div class="profile_info" id="profile_picture_div">
+			<h2><%=user.name%></h2>
+			<h4>Course::<%=user.user_profile[0].course%></h4>
+			<img src="http://localhost:3000/user_profile_images/<%=user.user_profile[0].profile_pic%>">
+		</div>
+		<div class="profile_info" id="about_me">
+			<h3>About Me</h3>
+			<p><%=user.user_profile[0].aboutme%></p>
+		</div>
+		<div class="profile_info" id="interests">
+			<h3>Socieites/Interests</h3>
+			<p><%=user.user_profile[0].interests%></p>
+		</div>
+	</div>
+	<div id="edit_profile_form_container">
+		<form id="edit_profile_form">
+			<ul style="background-color: grey">
+				<li>
+					<label for="name">Name</label>
+					<input type="text" name="name" value="<%=user.name%>">
+				</li>
+				<li>
+					<label for="name">Course</label>
+					<input type="text" name="course" value="<%=user.user_profile[0].course%>">
+				</li>
+				<li>
+					<label for="name">About Me</label>
+					<textarea rows="4" cols="25" name="description"><%=user.user_profile[0].aboutme%></textarea>
+				</li>
+				<li>
+					<label for="name">Societies/Interests</label>
+					<textarea rows="4" cols="25" name="interests"><%=user.user_profile[0].interests%></textarea>
+				</li>
+				<li>
+					<label for="profile_pic">Profile Pic</label>
+					<input id="upload_profile_pic" type="file" onchange="uploadProfileImage()">
+				</li>
+			</ul>
+			<button id="save_profile_button" type="button">Save</button>
+			<button id="cancel_edit_profile" type="button">Cancel</button>
+		</form>
+	</div>
+
+<div class="friend_requests_section">
+	<h2>Pending Requests</h2>
+	<ul>
+		<%user.friends_request.forEach(function(request){%>
+			<li>
+				<div id="<%=request.member_id%>" class="friends_request">
+					<div class="friend_request_pic">
+						<img src="http://localhost:3000/user_profile_images/<%=request.profile_pic%>">
+					</div>
+					<span><%=request.friend_name%></span>
+					<button id="accept_friend_request" type="submit">Accept</button>
+				</div>
+			</li>
+		<%})%>
+	</ul>
+</div>
+
+
+<div id="chat_section_wrapper">
+	
+</div>
+
+</body>
+<script>
+
+	let socket = io();
+	socket.emit("attach_user_info",{"member_id":"<%=user.member_id%>","user_name": "<%=user.name%>"});
+
+	$("#save_profile_button").on("click", function(){
+		$.ajax({
+			method: "POST",
+			url: "/user_profile/edit",
+			data: $("#edit_profile_form").serialize(),
+			success: function(){
+				$("#edit_profile_form_container").hide();
+			}
+		})
+	})
+
+	$("#edit_profile_button").on("click", function(){
+		$("#edit_profile_form_container").toggle();
+	});
+
+		$("#cancel_edit_profile").on("click", function(){
+		$("#edit_profile_form_container").hide();
+	});
+
+
+
+
+
+		function uploadProfileImage() {
+			let image_to_upload = $("#upload_profile_pic")[0].files[0]; /// selects the image we upload
+			console.log("image_to_upload", image_to_upload);
+			let reader = new FileReader();
+			reader.readAsDataURL(image_to_upload); // read the image
+			reader.onload = function(){
+				console.log("result", reader.result);
+				let image_data = {"image_data": reader.result.split(",")[1], "image_type": image_to_upload.type.split("/")[1]}; // create image data object to sent to the server
+				$.ajax({
+					method: "POST",
+					url: "profile_pic/upload",
+					data: JSON.stringify(image_data),
+					contentType: "application/json",
+					success: function(updated_profile_pic){
+						$(".profile_info img").remove();
+						$("#profile_picture_div").append("<img src=http://localhost:3000/user_profile_images/" + updated_profile_pic + ">" );
+					}
+				})
+			}
+		};
+
+		$("#accept_friend_request").on("click", function(){
+			let friend_member_id = $(this).parent().attr("id");
+			console.log(friend_member_id);
+			$.ajax({
+				method: "POST",
+				url: "/accept_friend_request",
+				contentType: "application/json",
+				data: JSON.stringify({"member_id": friend_member_id}),
+				success: function(){
+				}
+			})
+		});
+
+		$(".chat_button").on("click", function(){
+			let chat_box = `<div class="chat_section">
+								<div id="chat_title_section">
+									<span>Port Ponnect Chat</span>
+									<div class="chat_close">
+										<img src="http://localhost:3000/images/node_connect_close.png">
+									</div>
+								</div>
+								<div class="all_chat_messages">
+								</div>
+								<div id="send_message">
+									<input id="send_message_input" type="text" placeholder="Send Message">
+								</div>
+							</div>`
+
+		$("#chat_section_wrapper").append(chat_box);
+		})
+
+		$(document).on("click",".chat_close", function(){
+			$(".chat_section").remove();
+		})
+
+		socket.on("message_from_server", function(received_msg){
+			$(".all_chat_messages").append("<div class='usr_msg'>" + 
+												"<span class='user_with_message'>" + received_msg.user_name +"</span>" +
+												"<div class='usr_msg_box'>" +
+													"<p>" + received_msg.msg + "</p>" +
+												"</div>" +
+												"</div>"
+												)
+		})
+
+		$(document).on("keypress","#send_message_input", function(e){
+			if(e.keyCode === 13){
+				let chat_message_content = $(this).val();
+				console.log(chat_message_content);
+				$(".all_chat_messages").append("<div class='usr_msg'>" + 
+												"<span class='user_with_message'>You:</span>" +
+												"<div class='usr_msg_box'>" +
+													"<p>" + chat_message_content + "</p>" +
+												"</div>" +
+												"</div>"
+												)
+				socket.emit("message_from_client", {"msg": chat_message_content, "friend_member_id": $(".chat_button").attr("id")})
+				$(this).val("");
+			}
+		})
+
+</script>
+		<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+</html>
